@@ -3,9 +3,9 @@
 #include <queue>
 #include <cmath>
 #include <limits>
-#include <chrono>   // Для замеров времени
-#include <random>   // Для генерации случайных графов
-#include <iomanip>  // Для форматирования таблицы
+#include <chrono>   // Р”Р»СЏ Р·Р°РјРµСЂРѕРІ РІСЂРµРјРµРЅРё
+#include <random>   // Р”Р»СЏ РіРµРЅРµСЂР°С†РёРё СЃР»СѓС‡Р°Р№РЅС‹С… РіСЂР°С„РѕРІ
+#include <iomanip>  // Р”Р»СЏ С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёСЏ С‚Р°Р±Р»РёС†С‹
 #include <algorithm>
 
 using namespace std;
@@ -21,16 +21,16 @@ struct Edge {
     double weight;
 };
 
-// --- 1. РЕАЛИЗАЦИЯ АЛГОРИТМОВ ---
+// --- 1. Р Р•РђР›РР—РђР¦РРЇ РђР›Р“РћР РРўРњРћР’ ---
 
-// Эвристика: Евклидово расстояние
+// Р­РІСЂРёСЃС‚РёРєР°: Р•РІРєР»РёРґРѕРІРѕ СЂР°СЃСЃС‚РѕСЏРЅРёРµ
 double Heuristic(int u, int v, const vector<Point>& coords) {
     double dx = coords[u].x - coords[v].x;
     double dy = coords[u].y - coords[v].y;
     return sqrt(dx * dx + dy * dy);
 }
 
-// Алгоритм A* (A-Star)
+// РђР»РіРѕСЂРёС‚Рј A* (A-Star)
 bool Run_A_Star(int start, int goal, int N, const vector<vector<Edge>>& adj, const vector<Point>& coords) {
     vector<double> g_score(N, INF);
     vector<double> f_score(N, INF);
@@ -63,7 +63,7 @@ bool Run_A_Star(int start, int goal, int N, const vector<vector<Edge>>& adj, con
     return false;
 }
 
-// Алгоритм Флойда-Уоршелла
+// РђР»РіРѕСЂРёС‚Рј Р¤Р»РѕР№РґР°-РЈРѕСЂС€РµР»Р»Р°
 void Run_Floyd_Warshall(int N, const vector<vector<double>>& matrix_input) {
     vector<vector<double>> S = matrix_input;
 
@@ -80,7 +80,7 @@ void Run_Floyd_Warshall(int N, const vector<vector<double>>& matrix_input) {
     }
 }
 
-// --- 2. ГЕНЕРАЦИЯ ДАННЫХ ---
+// --- 2. Р“Р•РќР•Р РђР¦РРЇ Р”РђРќРќР«РҐ ---
 
 struct GraphData {
     int N;
@@ -120,10 +120,10 @@ GraphData GenerateGraph(int N, double density) {
     return data;
 }
 
-// --- 3. ОСНОВНОЙ ЦИКЛ ТЕСТИРОВАНИЯ ---
+// --- 3. РћРЎРќРћР’РќРћР™ Р¦РРљР› РўР•РЎРўРР РћР’РђРќРРЇ ---
 
 int main() {
-    // Настройки эксперимента
+    // РќР°СЃС‚СЂРѕР№РєРё СЌРєСЃРїРµСЂРёРјРµРЅС‚Р°
     vector<int> sizes = { 10, 50, 100, 200, 300, 500, 1000 };
     const int ITERATIONS = 10;
     const double DENSITY = 0.3;
@@ -148,13 +148,13 @@ int main() {
             int goal = node_dist(gen);
             while (start == goal) goal = node_dist(gen);
 
-            // 1. Замер A*
+            // 1. Р—Р°РјРµСЂ A*
             auto t1 = chrono::high_resolution_clock::now();
             Run_A_Star(start, goal, n, graph.adjList, graph.coords);
             auto t2 = chrono::high_resolution_clock::now();
             total_time_astar += chrono::duration<double, milli>(t2 - t1).count();
 
-            // 2. Замер Флойда-Уоршелла (теперь без ограничений)
+            // 2. Р—Р°РјРµСЂ Р¤Р»РѕР№РґР°-РЈРѕСЂС€РµР»Р»Р° (С‚РµРїРµСЂСЊ Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёР№)
             auto t3 = chrono::high_resolution_clock::now();
             Run_Floyd_Warshall(n, graph.adjMat);
             auto t4 = chrono::high_resolution_clock::now();
